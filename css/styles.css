@@ -1,0 +1,47 @@
+body {
+    text-align: center;
+    margin: 10;
+    font-family: Verdana, Tahoma, sans-serif;
+    font-size: 16px;
+}
+
+input {
+    margin: 20px 10px;
+    border: 2px solid #ccc;
+    padding: 10px 20px;
+    font-family: Verdana, Tahoma, sans-serif;
+    font-size: 16px;
+}
+
+/* task {
+    text-align: left;
+    padding: 10px;
+    cursor: default;
+    border-radius: 7px;
+} */
+
+td, tr, th {
+    border: 1px solid #ccc ;
+    padding: 10px 20px;
+}
+
+td:nth-child(even) {
+    background-color: #d7d9f2;
+}
+
+tr:nth-child(even) {
+    background-color: #eee;
+}
+
+#delete {
+    color: red;
+}
+
+#complete {
+    color: green;
+}
+
+/* .task:hover {
+    background-color: black;
+} */
+
