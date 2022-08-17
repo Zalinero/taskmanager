@@ -1,5 +1,7 @@
 <?php
 session_start();
+$template = 'templates/task_template.php';
+
 
 //add new data to a cookie
 function update_cookie($cookie_name, $new_data)
@@ -7,6 +9,10 @@ function update_cookie($cookie_name, $new_data)
     $data = '';
     if (isset($_COOKIE[$cookie_name])) {
         $data = json_decode($_COOKIE[$cookie_name], true);
+        if (!$new_data) {
+            //no new data, just return the cookie
+            return $data;
+        }
         $data[] = $new_data[0];
         setcookie($cookie_name, json_encode($data), time() + 86400);
     } else {
@@ -16,13 +22,12 @@ function update_cookie($cookie_name, $new_data)
     return $data;
 }
 
+
 //generate templates per row of data
 function generate_template($file, $data)
 {
     $output = '';
-
     foreach ($data as $row) {
-
         $output .= template($file, $row);
     }
     return $output;
@@ -44,7 +49,7 @@ function template($file, $data)
     return ob_get_clean();
 }
 
-// if submit was pressed, update tasklist and redirect to index
+// if submit was pressed, add task and redirect to index
 if (isset($_POST['submit'])) {
     if (isset($_SESSION['task_id'])) {
         $_SESSION['task_id']++;
@@ -58,8 +63,13 @@ if (isset($_POST['submit'])) {
 
     $task_data[] = array('task_id' => $_SESSION['task_id'], 'task_name' => $_POST['task']);
     $tasks = update_cookie("tasks", $task_data);
-    $file = 'templates/task_template.php';
-    $_SESSION['tasklist'] = generate_template($file, $tasks);
+ 
+    $_SESSION['tasks_display'] = generate_template($template, $tasks);
 
-    header("Location: index.php");
+} else {
+    //just update the list
+    $tasks = update_cookie("tasks", null);
+    $_SESSION['tasks_display'] = generate_template($template, $tasks);
 }
+
+header("Location: index.php");

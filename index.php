@@ -13,12 +13,41 @@ session_start();
     <link rel="stylesheet" href="./css/styles.css">
 </head>
 
+<script>
+    function deleteRow(button) {
+        //remove html
+        var row = button.parentNode.parentNode;
+        row.parentNode.removeChild(row);
+
+        //update the tasks cookie
+        var tasksCookie = getCookie("tasks");
+        tasksCookie = JSON.parse(decodeURIComponent(tasksCookie));
+        deleteTask(tasksCookie, row.id);
+        document.cookie = 'tasks=' + JSON.stringify(tasksCookie);
+        window.location.href = "update_tasks.php";
+    }
+
+    //get cookie by name 
+    function getCookie(name) {
+        name += '=';
+        for (var ca = document.cookie.split(/;\s*/), i = ca.length - 1; i >= 0; i--)
+            if (!ca[i].indexOf(name))
+                return ca[i].replace(name, '');
+    }
+
+    //remove task for given id
+    function deleteTask(tasks, id) {
+        for (var i = 0; i < tasks.length; i++) {
+            if (tasks[i].task_id == id) {
+                tasks.splice(i,1);
+            }
+        }
+    }
+</script>
+
 <body>
     <div class="container" style="width: 400px; margin: auto;">
-        <!-- header -->
         <h2 class="title">My Tasks</h2>
-
-        <!-- input field -->
         <div>
             <table class="tasklist">
                 <tbody class="task">
@@ -32,10 +61,7 @@ session_start();
                     </div>
                     <div>
                         <?php
-                        //TODO: SANITIZE
-                        if (isset($_SESSION['tasklist'])) {
-                            print $_SESSION['tasklist'];
-                        }
+                            print $_SESSION['tasks_display'] ?? null;
                         ?>
                     </div>
                 </tbody>
@@ -45,3 +71,4 @@ session_start();
 </body>
 
 </html>
+
