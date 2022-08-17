@@ -2,8 +2,13 @@
 session_start();
 $template = 'templates/task_template.php';
 
-
-//add new data to a cookie
+/**
+ * Add new data to a cookie
+ *
+ * @param string $cookie_name 
+ * @param array $new_data array of data to push to the cookie
+ * @return void
+ */
 function update_cookie($cookie_name, $new_data)
 {
     $data = '';
@@ -23,7 +28,13 @@ function update_cookie($cookie_name, $new_data)
 }
 
 
-//generate templates per row of data
+/**
+ * generate templates per row of data
+ *
+ * @param string $file string pointing to a template file
+ * @param  array() $data array containing arrays of data
+ * @return void return html generated from templates
+ */
 function generate_template($file, $data)
 {
     $output = '';
@@ -33,7 +44,13 @@ function generate_template($file, $data)
     return $output;
 }
 
-//output a single template
+/**
+ * output one template
+ *
+ * @param string $file string pointing to a template file
+ * @param array $data row of data in array form
+ * @return void
+ */
 function template($file, $data)
 {
     if (!file_exists($file)) {
@@ -49,7 +66,9 @@ function template($file, $data)
     return ob_get_clean();
 }
 
-// if submit was pressed, add task and redirect to index
+/**
+ *  if submit was pressed, add task and redirect to index
+ */
 if (isset($_POST['submit'])) {
     if (isset($_SESSION['task_id'])) {
         $_SESSION['task_id']++;
@@ -67,7 +86,7 @@ if (isset($_POST['submit'])) {
     $_SESSION['tasks_display'] = generate_template($template, $tasks);
 
 } else {
-    //just update the list
+    //no changes, just update the list
     $tasks = update_cookie("tasks", null);
     $_SESSION['tasks_display'] = generate_template($template, $tasks);
 }
